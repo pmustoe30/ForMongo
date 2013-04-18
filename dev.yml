@@ -1,0 +1,12 @@
+website_port: 3000
+website_deploy_directory: c:\iisexpress\ForMongo
+website_port_load_balanced_1: 4000
+website_deploy_directory_load_balanced_1: c:\iisexpress\ForMongo_4000
+website_port_load_balanced_2: 5000
+website_deploy_directory_load_balanced_2: c:\iisexpress\ForMongo_5000
+solution_name: ForMongo #just the name, no .sln extension
+mvc_project: ForMongo #just the folder name, no .csproj extension
+test_project: ForMongo.Tests #just the folder name, no .csproj extension
+test_runner: ./packages/nspec.0.9.65/tools/NSpecRunner.exe
+iis_express: C:\Program Files (x86)\IIS Express
+database_name: ForMongo
