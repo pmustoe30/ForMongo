@@ -67,6 +67,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicMongo.cs" />
     <Compile Include="MongoModule.cs" />
     <Compile Include="Repositories\People.cs" />
     <Compile Include="Controllers\HomeController.cs" />

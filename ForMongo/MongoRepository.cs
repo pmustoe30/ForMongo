@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Driver.Builders;
 using Oak;
+using M = MongoDB.Driver.Builders;
 
 namespace ForMongo
 {
@@ -30,7 +31,34 @@ namespace ForMongo
         public virtual void Insert(dynamic o)
         {
             var collection = Collection();
-            collection.Insert(o.Bson());
+
+            var bson = o.Bson();
+
+            collection.Insert(bson);
+
+            o._id = (ObjectId)bson["_id"].Value;
+        }
+
+        public virtual void Update(dynamic o)
+        {
+            var collection = Collection();
+
+            collection.Save(o.Bson());
+        }
+
+        public virtual IEnumerable<dynamic> Query(dynamic o)
+        {
+            var collection = Collection();
+
+            dynamic gemini = new Gemini(o);
+
+            var memberName = gemini.Members()[0];
+
+            var memberValue = gemini.GetMember(memberName);
+
+            var objs = collection.Find(M.Query.EQ(memberName, BsonValue.Create(memberValue))) as MongoCursor<BsonDocument>;
+
+            return objs.Select(s => Projection(s));
         }
 
         private MongoCollection<BsonDocument> Collection()
@@ -47,7 +75,7 @@ namespace ForMongo
             var client = new MongoClient(connectionString);
             var server = client.GetServer();
             var database = server.GetDatabase(db);
-            var obj = Collection().Find(MongoDB.Driver.Builders.Query.EQ("_id", BsonValue.Create(id))).FirstOrDefault();
+            var obj = Collection().Find(M.Query.EQ("_id", BsonValue.Create(id))).FirstOrDefault();
 
             if (obj == null) return null;
 

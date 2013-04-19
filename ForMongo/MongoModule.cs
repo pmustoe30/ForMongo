@@ -19,8 +19,6 @@ namespace ForMongo
 
         void Init()
         {
-            if (!o.RespondsTo("_id")) o._id = ObjectId.GenerateNewId();
-
             o.Bson = new DynamicFunction(Bson);
         }
 

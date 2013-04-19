@@ -7,7 +7,9 @@ namespace ForMongo.Repositories
     public class People : MongoRepository
     {
         public People()
-            : base("People", "test", "mongodb://localhost")
+            : base("People",
+                "test",
+                "mongodb://localhost")
         {
 
         }

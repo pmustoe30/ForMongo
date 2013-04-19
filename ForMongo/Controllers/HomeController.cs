@@ -14,26 +14,50 @@ using ForMongo.Repositories;
 
 namespace ForMongo.Controllers
 {
+    public class Person : DynamicMongo 
+    {
+        //public dynamic Bson()
+        //{
+        //    if(_.RespondsTo("_id"))
+        //    {
+        //        return new BsonDocument(_.Select("_id", "FirstName", "LastName").HashOfProperties());    
+        //    }
+
+        //    return new BsonDocument(_.Select("FirstName", "LastName").HashOfProperties());    
+        //}
+    }
+
     public class HomeController : Controller
     {
-        static HomeController()
-        {
-            Gemini.Initialized<Gemini>(d => new MongoModule(d));
-        }
-
         People people = new People();
 
+        static HomeController()
+        {
+
+        }
+
+        [HttpGet]
         public ActionResult Index()
         {
-            dynamic person = new Gemini();
+            dynamic person = new Person();
 
-            person.Name = "wwwaazzzuppp";
+            person.FirstName = Guid.NewGuid().ToString().Substring(0, 5);
+
+            person.LastName = Guid.NewGuid().ToString().Substring(0, 5);
+
+            person.Age = new Random().Next(14, 16);
 
             people.Insert(person);
 
-            var fromDb = people.Get(person._id);
+            var query = people.Query(new { Age = 15 }).ToList();
 
-            return View();
+            var result = new
+            {
+                inserted = people.Get(person._id),
+                is15 = query
+            };
+
+            return new DynamicJsonResult(result);
         }
     }
 }
